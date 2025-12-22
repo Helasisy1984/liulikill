@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>琉璃版Q&A咨询助手 - 爱来自无名杀</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 12px;
+            min-height: 100vh;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 18px 15px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.15);
+            position: relative;
+            overflow: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            margin-bottom: 5px;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1);
+        }
+        
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        h1 i {
+            color: #ffd166;
+        }
+        
+        .subtitle {
+            font-size: clamp(0.85rem, 3vw, 1.1rem);
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        @media (min-width: 992px) {
+            .main-content {
+                flex-direction: row;
+            }
+            
+            .search-section {
+                flex: 3;
+            }
+            
+            .quick-questions {
+                flex: 1;
+            }
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: clamp(18px, 4vw, 25px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin-bottom: 18px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .card-title i {
+            color: #6a11cb;
+        }
+        
+        .search-box {
+            display: flex;
+            margin-bottom: 18px;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: clamp(14px, 4vw, 18px) 20px;
+            border: none;
+            font-size: clamp(1rem, 3.5vw, 1.1rem);
+            outline: none;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+            min-width: 0;
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 0 clamp(20px, 5vw, 30px);
+            cursor: pointer;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+        }
+        
+        .search-btn:hover {
+            background: linear-gradient(135deg, #5a0cb9 0%, #1c68f0 100%);
+        }
+        
+        .result-container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: clamp(15px, 4vw, 20px);
+            min-height: 180px;
+            max-height: 70vh;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #eaeaea;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .result-container h3 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        
+        .result-container p {
+            color: #555;
+            white-space: pre-line;
+            line-height: 1.7;
+            padding: 12px;
+            background-color: white;
+            border-radius: 8px;
+            border-left: 4px solid #6a11cb;
+            margin-bottom: 18px;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+            font-size: clamp(0.95rem, 3vw, 1rem);
+            word-break: break-word;
+        }
+        
+        /* 回答中的链接样式 */
+        .result-container p a {
+            color: #2575fc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            word-break: break-all;
+        }
+        
+        .result-container p a:hover {
+            color: #6a11cb;
+            text-decoration: underline;
+        }
+        
+        .video-container {
+            margin-top: 20px;
+            background-color: #f0f7ff;
+            border-radius: 10px;
+            padding: 18px;
+            border: 1px solid #d1e3ff;
+        }
+        
+        .video-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+        }
+        
+        .video-player {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            height: auto;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 180px;
+            background-color: #2c3e50;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 12px;
+        }
+        
+        .video-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            color: #6a11cb;
+        }
+        
+        .link-section {
+            margin-top: 18px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #2575fc;
+        }
+        
+        .link-section h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: clamp(1rem, 3.5vw, 1.1rem);
+        }
+        
+        .link-list {
+            list-style-type: none;
+            padding-left: 5px;
+        }
+        
+        .link-list li {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .link-list a {
+            color: #2575fc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            word-break: break-all;
+        }
+        
+        .link-list a:hover {
+            color: #6a11cb;
+            text-decoration: underline;
+        }
+        
+        .quick-questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .question-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 14px 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            color: #444;
+            display: block;
+            width: 100%;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+        
+        .question-btn:hover, .question-btn:active {
+            background-color: #6a11cb;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(106, 17, 203, 0.2);
+        }
+        
+        .hint {
+            background-color: #e8f4fc;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 18px;
+            font-size: clamp(0.85rem, 3vw, 0.95rem);
+            color: #2c3e50;
+            border-left: 4px solid #2575fc;
+            line-height: 1.5;
+        }
+        
+        .hint i {
+            color: #2575fc;
+            margin-right: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 18px 12px;
+            color: #7f8c8d;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            margin-top: 18px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            line-height: 1.5;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            background-color: #eef2ff;
+            color: #5a67d8;
+            padding: 5px 10px;
+            border-radius: 18px;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            margin-right: 6px;
+            margin-bottom: 6px;
+            border: 1px solid #d1d5f7;
+            word-break: normal;
+        }
+        
+        .keyword-section {
+            margin-top: 15px;
+        }
+        
+        .keyword-title {
+            font-size: clamp(0.85rem, 3vw, 0.95rem);
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .no-results {
+            color: #e74c3c;
+            text-align: center;
+            padding: 30px 15px;
+            font-size: clamp(1rem, 3.5vw, 1.1rem);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 25px 15px;
+            color: #7f8c8d;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+        
+        .genshin-response {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #ff6b6b;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .genshin-title {
+            color: #ff6b6b;
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .genshin-content {
+            background-color: white;
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.7;
+            font-size: clamp(0.95rem, 3vw, 1.05rem);
+            color: #444;
+            border: 1px solid #ffeaea;
+        }
+        
+        .genshin-step {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid #4ecdc4;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+        
+        .genshin-tip {
+            background-color: #e8f4fc;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: clamp(0.85rem, 3vw, 0.95rem);
+            color: #2c3e50;
+            border-left: 4px solid #4ecdc4;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .data-management {
+            margin-top: 25px;
+        }
+        
+        .data-management-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .data-management-btn:hover, .data-management-btn:active {
+            background-color: #0da271;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        
+        .management-panel {
+            display: none;
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .management-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        }
+        
+        .management-form {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #444;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+        
+        .form-group input, .form-group textarea {
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            width: 100%;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .form-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .add-btn {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .add-btn:hover, .add-btn:active {
+            background-color: #2563eb;
+        }
+        
+        .cancel-btn {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .cancel-btn:hover, .cancel-btn:active {
+            background-color: #dc2626;
+        }
+        
+        /* 移动端特定样式 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                gap: 15px;
+            }
+            
+            header {
+                padding: 15px 12px;
+                margin-bottom: 0;
+            }
+            
+            .card {
+                padding: 16px;
+            }
+            
+            .quick-questions-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .search-input {
+                padding: 14px 16px;
+            }
+            
+            .video-placeholder {
+                height: 160px;
+            }
+            
+            .genshin-response {
+                padding: 16px;
+            }
+            
+            .genshin-title {
+                font-size: 1.2rem;
+            }
+            
+            .result-container {
+                max-height: 65vh;
+            }
+            
+            .question-btn {
+                padding: 12px 10px;
+            }
+            
+            .footer {
+                padding: 15px 10px;
+            }
+            
+            /* 移动端触摸优化 */
+            button, .question-btn, .search-btn {
+                touch-action: manipulation;
+            }
+            
+            /* 移动端字体优化 */
+            .result-container p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+            
+            .hint {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* 超小屏幕优化 */
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            
+            .container {
+                gap: 12px;
+            }
+            
+            header {
+                padding: 12px 10px;
+                border-radius: 10px;
+            }
+            
+            .card {
+                padding: 14px;
+                border-radius: 10px;
+            }
+            
+            .search-box {
+                border-radius: 40px;
+            }
+            
+            .search-input {
+                padding: 12px 14px;
+                font-size: 0.95rem;
+            }
+            
+            .search-btn {
+                padding: 0 20px;
+                min-width: 50px;
+            }
+            
+            .result-container {
+                padding: 12px;
+                border-radius: 8px;
+            }
+            
+            .video-placeholder {
+                height: 140px;
+            }
+            
+            .video-placeholder i {
+                font-size: 2.5rem;
+            }
+            
+            .question-btn {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .form-buttons button {
+                min-width: 100px;
+            }
+        }
+        
+        /* 平板设备优化 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .quick-questions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .container {
+                gap: 20px;
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-gem"></i> 琉璃版Q&A咨询助手</h1>
+            <p class="subtitle">支持视频教程和外部链接，输入问题关键词或点击下方常见问题快速获取解答</p>
+            <p class="subtitle" style="margin-top: 8px; font-size: 0.85rem;">
+                <i class="fas fa-video"></i> 支持视频教程观看 | <i class="fas fa-external-link-alt"></i> 支持外部链接跳转
+            </p>
+        </header>
+        
+        <div class="main-content">
+            <section class="search-section card">
+                <h2 class="card-title"><i class="fas fa-search"></i> 问题搜索</h2>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="请输入问题或关键词，例如：皮肤包导入、更新方法...">
+                    <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i></button>
+                </div>
+                
+                <div class="hint">
+                    <i class="fas fa-lightbulb"></i> 提示：输入问题关键词搜索，例如："皮肤包"、"禁将"、"更新"等
+                </div>
+                
+                <div class="result-container" id="resultContainer">
+                    <div class="loading">
+                        <i class="fas fa-info-circle"></i> 请输入问题或点击下方常见问题开始咨询
+                    </div>
+                </div>
+            </section>
+            
+            <section class="quick-questions card">
+                <h2 class="card-title"><i class="fas fa-bolt"></i> 常见问题</h2>
+                <p style="margin-bottom: 12px; font-size: 0.95rem;">点击以下问题快速获取答案：</p>
+                
+                <div class="quick-questions-grid" id="quickQuestionsGrid">
+                    <!-- 常见问题按钮将通过JavaScript动态生成 -->
+                </div>
+                
+                <div class="hint">
+                    <i class="fas fa-database"></i> 当前知识库包含 <span id="qaCount">0</span> 个问答条目
+                </div>
+            </section>
+        </div>
+        
+        <div class="footer">
+            <p>琉璃版Q&A咨询页面 &copy; 2025 | 数据来源于《琉璃版Q&A.xlsx》</p>
+            <p>本页面支持视频播放和外部链接跳转，所有数据存储在本地，支持模糊搜索和关键词匹配</p>
+            <!--p>服务器地址：<code>http://119.29.242.149/</code></p-->
+        </div>
+    </div>
+
+    <script>
+        // Q&A数据对象 - 扩展了videoUrl和links字段
+        const qaData = [
+            {
+                question: "琉璃版安装包下载",
+                keywords: ["下载", "网盘", "安装包", "获取琉璃版", "怎么下载"],
+                answer: "琉璃版最新下载渠道：\n\n为了方便大家，我们准备了多个网盘链接：\n\n夸克网盘：https://pan.quark.cn/s/4d8a3711fb1e\n无需提取码，直接下载！\n\n百度网盘：https://pan.baidu.com/s/1ImO0rfMj3NjlqriI8TDmWw?pwd=hela\n提取码：hela\n\n迅雷网盘：https://pan.xunlei.com/s/VOTbK8GRH4bWhDqh_5aD0RBTA1?pwd=umjd#\n提取码：umjd\n\n重要提醒：\n所有链接都有效哦，复制链接时记得删掉那些表情符号，输入完整链接才能正常访问。\n\n更推荐的做法：加入我们的交流群，和群友一起玩，有问题随时问。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "KK佬皮肤包下载",
+                keywords: ["皮肤包下载", "KK皮肤", "动皮静皮", "皮肤资源"],
+                answer: "这是KK佬精心整理的皮肤包：\n\nKK佬动/静态皮肤合集：\n\n夸克网盘：https://pan.quark.cn/s/c1550260361e\n无需提取码\n\n百度网盘：https://pan.baidu.com/s/1J7X-JrinQAhXsjpjsv65xg?pwd=hela\n提取码：hela\n\n希望大家玩得开心，有不懂的随时问。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "文件结构快查/内容辨别",
+                keywords: ["辨别", "压缩包", "内容", "图示", "目录", "文件结构"],
+                answer: "嗨！你是想知道琉璃版的文件夹结构对吧？我来给你详细说说。\n\n主要目录结构是这样的：\n/storage/emulated/0/Android/data/com.helasisy.liulikill/\n└── extension/  这里是放各种扩展和皮肤包的地方\n    ├── [扩展名]/  每个扩展都有自己的文件夹\n    │   ├── extension.js  扩展主文件（这个必须有）\n    │   └── info.js  扩展信息声明\n    │\n    ├── 千幻聆音/  静态皮肤包存放处\n    │   ├── sanguoaudio/     静皮语音\n    │   ├── sanguoskin/      静皮露头\n    │   ├── sanguoyuanhua/   静皮原画\n    │   ├── skinChange.js    自动换肤参数\n    │   ├── skinEdit.js      静皮显示区域修正\n    │   └── skinShare.js     同名武将静皮共享\n    │\n    ├── 如真似幻/  启动页和大厅主题\n    │   ├── images/uiStyles/  各种大厅主题\n    │   └── spine/startSpine/ 启动页动画\n    │\n    └── 十周年UI/  动态皮肤包\n        ├── assets/dynamic/  动皮文件都在这里\n        └── dynamicskin.js   动皮参数配置\n\n如果有不清楚某个文件夹的作用，随时问我。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "皮肤包导入注意事项",
+                keywords: ["注意事项", "导入注意", "皮肤注意事项"],
+                answer: "在导入皮肤包之前，有几个重要的事情需要注意：\n\n准备工作要做足：\n琉璃版需要MT管理器和Shizuku配合使用，这两个应用在群文件里有。\n如果要下载最新版，记得去酷安、谷歌商店这些正规渠道，有些应用商店里有假的应用。\n\n版本兼容性提醒：\n新版本的皮肤包可能和琉璃版有些小差别，比如文件夹名字、文件位置，需要的话得自己调整一下。\n解压的时候千万别切到后台！要一次性解压到正确位置。\n\n千万别这样做：\n不要用琉璃版直接打开皮肤包，不支持！\n不要用假装无敌的静态皮肤包，不兼容，得自己改。\nMT管理器的解压到某处和移动文件到某处是两码事！用错了游戏可能读不到文件。\n\n操作黄金法则：大多数情况选移动并替换就对了。\n\n快速获取帮助：\n引用我的话并说使用皮肤，查看详细使用方法。\n引用我的话并说问题排查，解决皮肤相关问题。\n\n有不确定的地方随时问我。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "皮肤包导入方式",
+                keywords: ["动皮", "静皮", "使用皮肤", "怎么导入", "导入教程"],
+                answer: "我来教你导入皮肤包，按照下面步骤来就行：\n\n准备工作：先看看上面的注意事项，磨刀不误砍柴工。\n\n四步搞定导入：\n\n第一步：授权\n用Shizuku给MT管理器授权，Shizuku里有详细教程，照着做就行。\n\n第二步：定位文件\n在QQ文件或网盘里找到皮肤包，选择用其他应用打开，选MT管理器。\n新版MT点定位所在位置，旧版可能是在MT中查看。\n\n第三步：打开目标文件夹\n点击另一侧空白区域（没显示皮肤包的那边）。\n找到这个路径：/storage/emulated/0/Android/data/com.helasisy.liulikill/extension/\n\n第四步：解压操作\n选中皮肤包所有内容，长按任意文件，点解压->按钮。\n确保两边有同名文件夹就OK。\n\n完成啦！进游戏看看效果吧。\n\n遇到问题？引用我的话并说问题排查，我来帮你解决。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "皮肤包问题排查",
+                keywords: ["问题排查", "皮肤问题", "显示问题", "出框效果"],
+                answer: "皮肤问题排查指南：\n\n先看看上面的注意事项和使用方法，很多问题其实都是操作小细节。\n\n一、皮肤显示问题\n\n情况1：动皮不显示/全显示默认皮肤/全显示黑袍人\n原因：游戏机制限制，同时显示太多动皮会冲突。\n解决：到菜单→扩展→静皮管理里调整这两个开关：无静皮时显示和小窗动皮关闭。\n\n情况2：动皮显示为黄色背景\n原因：游戏找不到皮肤文件。\n解决：确认下载了完整皮肤包，检查是否正确安装。如果个别动皮不行，可能是代码问题，问问皮肤包作者。\n\n二、没有出框效果\n这是最常见的问题之一！三步解决：\n1. 打开菜单→扩展→基础美化，开启动态皮肤开关\n2. 打开菜单→扩展→动皮管理，开启使用出框功能开关\n3. 重启游戏或重新进入对局\n\n三、大厅查看皮肤\n进武将页面，点右下角➕，选皮肤，确定。点击武将查看详情。\n注意：这里只能看静皮，动皮看不到。\n\n如果还有问题，把具体情况告诉我，我帮你分析。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "琉璃版该如何更新",
+                keywords: ["更新", "安装", "怎么更新", "版本更新"],
+                answer: "琉璃版更新很简单，支持覆盖安装，你的段位、武将、皮肤、扩展都不会丢。不过武将补充会失效，需要重新安装。\n\n手机版更新步骤：\n\n1. 下载安装\n下载最新版的琉璃版安装包，直接覆盖安装，就像更新普通APP一样。\n\n2. 资源下载\n进入游戏大厅，点右下角➕菜单，选资源下载，确定。\n\n3. 等待重启\n游戏会自动解压文件并重启，完成后更新就搞定啦。\n\n整个过程大概几分钟，取决于你的网速和手机速度。\n\n小提醒：更新后如果武将不见了，别慌！那是武将补充失效了，等kk佬发布新版本的武将补充就行。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "获取使用动态大厅主题",
+                keywords: ["至臻", "主题", "大厅主题", "动态主题"],
+                answer: "动态大厅主题获取与使用：\n\n获取途径：\nB站关注Helasisy大佬，抖音关注无名杀长公主，留意群通知，或者自己动手制作。\n\n导入方法：\n用MT管理器打开下载的主题文件，解压到这个路径：\n/storage/emulated/0/Android/data/com.helasisy.liulikill/extension/如真似幻/images/uiStyles/\n\n使用方法：\n进游戏大厅，左侧第二个按钮切换主题，第三个按钮切换动态/静态。\n\n小秘密：有些主题真的超炫，找到了记得在群里分享下感受。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "如何修改禁将",
+                keywords: ["禁将", "锁定", "禁用武将", "禁将设置"],
+                answer: "禁将设置全攻略：\n\n两种进入方式：\n1. 对局外：大厅→武将按钮→右上角禁将设置\n2. 对局内：点小钟表按钮→顶部菜单找禁将开关\n\n解锁全部武将（如果想玩所有武将）：\n进菜单→扩展→手杀全扩，把前四个开关都关掉。长按开关文字可以看详细说明。\n\n设置禁将步骤：\n\n第一步：选方案\n在禁将界面右边选个顺眼的方案，比如方案1。\n\n第二步：开始禁将\n点武将头像就行，选了就不能用啦。\n\n第三步：应用方案\n找到禁将方案字样右边的绿色齿轮按钮，把你设置好的方案应用到想用的模式里。\n\n小技巧：不同模式可以设置不同的禁将方案，比如排位和军争分开设置。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "如何使用扩展包",
+                keywords: ["自制", "拓展", "扩展", "扩展包"],
+                answer: "扩展包使用指南：\n\n正常情况：\n下载的扩展包是一个文件夹，直接放到这个路径就行：\n/storage/emulated0/Android/data/com.helasisy.liulikill/extension/\n\n特殊情况：\n如果打开扩展包发现是一堆零散文件：\n1. 在extension文件夹里新建一个文件夹\n2. 文件夹名字必须和扩展包名字一致，不然会报错\n3. 把零散文件都放进去\n\n懒人方法：\n直接用其他应用打开，选用琉璃版打开，大部分扩展包都支持这个方式。\n\n注意：扩展包和皮肤包不一样，别放错地方。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "如何添加三服武将补充",
+                keywords: ["本体", "补充", "武将补充", "三服"],
+                answer: "武将补充添加说明：\n\n下载使用：\n武将补充包（标注补丁的除外）都是全量包，直接下载最新版就行，包含以前的所有内容。压缩包里都有说明书，记得看。\n\n重要提醒：琉璃版更新会覆盖武将补充！\n每次更新琉璃版后，武将补充需要重新安装。\n旧版本的武将补充可能不兼容新版本。\n要等kk佬发布适配新版本的武将补充。\n\n更新后的流程：\n1. 更新琉璃版\n2. 等待kk佬发布新版武将补充\n3. 下载安装新版武将补充\n\n更新后如果发现武将不见了别着急，等等kk佬的新包就好。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "局内作弊/换将/控牌",
+                keywords: ["作弊", "控制", "换将", "控牌", "调试"],
+                answer: "局内控制功能详解：\n\n琉璃版内置了多种控制功能，分为三部分：\n\n1. 制裁机制\n只在排位模式生效，详细说明在扩展里有。\n\n2. 游戏自定义工具\n开启：菜单→扩展→娱乐设置，打开最下面的开关。\n使用：重启游戏后，武将会多一个调试技能，点它就行。\n\n3. 控制台\n位置：菜单→其它→控制\n用法：选功能，选数量，选对象，点右下角作按钮。\n\n更多玩法：\n还可以安装这些扩展获得更多功能：\nhelasisy的面杀怪谈（娱乐向）\n棘手怀念摧毁的搬运自用（功能向）\n\n注意：适度娱乐，别影响其他玩家体验。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "身份、武将、座次",
+                keywords: ["身份", "武将", "座次", "选将", "军争"],
+                answer: "身份与座次设置：\n\n军争模式：\n选将时把菜单往上拖动，下面藏着身份和座次切换开关。很多人不知道这个小秘密。\n\n22排位模式：\n可以勾选为他推荐，然后指定一个武将，AI就会乖乖选你指定的武将啦。\n\n想换将？引用我的话并说换将，我告诉你怎么在对局里换将。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "手牌相关设置",
+                keywords: ["手牌", "选牌", "折叠", "牌名", "卡牌", "手牌设置"],
+                answer: "手牌个性化设置：\n\n手牌展开/折叠：\n1. 完全展开：菜单→扩展→卡牌美化，打开手牌完全折叠开关\n2. 堆叠显示：关闭上面开关，然后调整手牌折叠比例\n\n看不到牌名？\n打开菜单→扩展→基础美化，开启牌名辅助显示。\n\n更换卡牌风格：\n单机模式：菜单→扩展→基础美化→单机：卡牌风格\n联机/大厅进：菜单→扩展→基础美化→如真：卡牌风格\n\n小建议：试试不同风格，找到你最喜欢的那款。",
+                videoUrl: "",
+                links: []
+            },
+            //MT相关
+            {
+                question: "MT管理器基础操作指南",
+                keywords: ["MT管理器", "MT基本操作", "文件管理", "解压替换", "mt2.cn"],
+                answer: "MT管理器基础操作教程：\n\nMT管理器是一款强大的安卓文件管理工具，下载地址：https://mt2.cn/\n\n基本操作步骤：\n\n1. 安装后打开，你会看到左右两个文件管理窗口\n\n2. 在左侧窗口找到下载的皮肤包/扩展包\n\n3. 在右侧窗口导航到目标路径：\n/storage/emulated/0/Android/data/com.helasisy.liulikill/extension/\n\n4. 解压操作（非常重要！）：\n   - 选中皮肤包所有内容\n   - 长按任意文件，点解压->按钮\n   - 确保两边有同名文件夹\n\n5. 覆盖替换操作：\n   - 出现同名文件时，选择覆盖替换\n   - 不要选择移动或复制\n\n6. 文件搜索：点击右上角搜索图标，可快速定位文件\n\n重要提醒：\n- 一定要用MT管理器进行文件操作\n- 操作时不要切换到后台\n- 确保路径完全正确",
+                videoUrl: "",
+                links: [
+                    {
+                        text: "MT管理器官方网站",
+                        url: "https://mt2.cn/"
+                    },
+                    {
+                        text: "MT管理器官方教程",
+                        url: "https://mt2.cn/docs/"
+                    }
+                ]
+            },
+            {
+                question: "如何使用Shizuku为MT管理器授权？",
+                keywords: ["Shizuku", "Shizuku授权", "MT权限", "无线调试", "ADB"],
+                answer: "Shizuku授权MT管理器教程：\n\nShizuku下载地址：https://shizuku.rikka.app/\n\nShizuku授权步骤：\n\n第一步：准备工作\n1. 安装Shizuku应用\n2. 打开开发者选项（设置→关于手机→多次点击版本号）\n3. 启用USB调试或无线调试\n\n第二步：启动Shizuku\n方法A（无线调试）：\n1. 在Shizuku中启动无线调试\n2. 配对并连接\n3. 授予必要的权限\n\n方法B（通过电脑ADB）：\n1. 用USB连接电脑\n2. 电脑运行：adb shell sh /sdcard/Android/data/moe.shizuku.privileged.api/start.sh\n\n第三步：MT管理器授权\n1. 打开MT管理器\n2. 系统会提示请求权限\n3. 授权给MT管理器\n\n第四步：验证授权\n1. 尝试访问Android/data目录\n2. 如果能正常访问，说明授权成功\n\n注意：每次重启手机后可能需要重新授权，可通过黑域协助Shizuku获得稳定授权。",
+                videoUrl: "",
+                links: [
+                    {
+                        text: "Shizuku官方网站",
+                        url: "https://shizuku.rikka.app/"
+                    },
+                    {
+                        text: "Shizuku详细教程",
+                        url: "https://shizuku.rikka.app/guide/setup/"
+                    }
+                ]
+            },
+            {
+                question: "如何使用黑域协助Shizuku获得稳定授权？",
+                keywords: ["黑域", "Brevent", "稳定授权", "长期权限", "brevent.jianyv.com"],
+                answer: "黑域协助Shizuku获得稳定授权教程：\n\n黑域下载地址：https://brevent.jianyv.com/\n\n详细步骤：\n\n第一步：准备工作\n1. 安装黑域(Brevent)和Shizuku\n2. 打开黑域，按照提示开启辅助功能\n\n第二步：启用开发者选项和无线调试\n1. 通过黑域打开开发者选项\n2. 启用无线调试\n3. 点开无线调试，查看并记住端口号\n\n或者：\n1. 启用USB调试\n2. 使用USB线连接电脑\n\n第三步：电脑端操作（如使用USB调试）\n1. 电脑使用浏览器访问 brevent.sh\n2. 进入ADB模式\n3. 点击左上角三杠图标打开侧边栏\n4. 进入执行指令页面\n\n第四步：执行Shizuku启动指令\n1. 在Shizuku应用中查看通过链接电脑启动方案\n2. 获取指令，如：sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh\n3. 在黑域的执行指令页面运行这个指令（去掉adb shell前缀）\n4. 运行成功后重启MT管理器\n\n第五步：验证长期权限\n1. 重启手机\n2. 打开MT管理器，检查是否仍然有权限\n3. 如果权限保留，说明成功\n\n优势：\n- 不需要多次开启Shizuku\n- 重启手机后权限依然保留\n- 长期稳定使用\n\n注意：此方法由技术大佬提供，网上可能没有完整教程。",
+                videoUrl: "",
+                links: [
+                    {
+                        text: "黑域(Brevent)官方网站",
+                        url: "https://brevent.jianyv.com/"
+                    },
+                    {
+                        text: "黑域使用教程",
+                        url: "https://brevent.jianyv.com/docs/"
+                    }
+                ]
+            },
+            //新的内容
+            {
+                question: "疑难杂症",
+                keywords: ["特效", "花色", "WebView", "视频特效", "问题解决"],
+                answer: "常见问题解决方案：\n\n视频特效无法播放：\n如果看到视频播放失败，已为您屏蔽此类特效提示，原因是你手机的WebView不支持这类特效。解决：升级WebView试试，避免游戏卡死所以自动关了。\n\n手牌花色显示异常：\n花色太大或太小？花色也是WebView渲染的，可以升级WebView，或者自己改文件：修改十周年UI目录下的layout_new.css文件。\n\n其他问题：如果遇到别的问题，把具体情况告诉我，我帮你分析。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "动态皮肤参数文件如何更新？",
+                keywords: ["dynamicSkin.js", "参数文件", "动皮参数", "日期最新", "更新动皮"],
+                answer: "动态皮肤参数文件更新方法：\n\n1. 下载完整的动皮包，解压到路径：\n/storage/emulated/0/Android/data/com.helasisy.liulikill/extension/\n\n2. 动皮文件全部覆盖替换\n\n3. 参数文件 dynamicSkin.js 则用日期最新的覆盖替换，dynamicSkin.js 放在十周年UI文件夹里面\n\n4. 这些文件导入最好用 MT 管理器操作，一定要复制替换或者解压替换，不然读取不到文件后果自负！！！\n\n5. 如果读取不到 data，下载 Shizuku 并按教程授权\n\n6. 记得更新 Android System WebView 可以使无名杀更加流畅，而且可以解决动皮错误和卡退类情况",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "静态皮肤的必要性和设置方法",
+                keywords: ["静态皮肤", "静皮包", "千幻聆音", "语音", "静皮目录"],
+                answer: "静态皮肤的必要性：\n\n想要动态皮肤有语音和图片一定要下载安装静皮包！\n不然切换动皮的话就没有专属的语言了，只会播放原皮的语言。\n\n静皮安装步骤：\n1. 将 sanguoaudio, sanguoyuanhua, sanguoskin 三个文件夹解压到路径：\n/storage/emulated/0/Android/data/com.helasisy.liulikill/extension/千幻聆音/\n\n2. 设置静皮目录：\n进入游戏菜单→扩展→静皮管理，找到：\n- 本体武将皮肤目录\n- 扩展武将皮肤目录\n把这两个都改成千幻聆音目录\n\n3. 完成设置后，动皮就能正常播放专属语音了。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "双形态皮肤如何设置专属语音和卡牌语音？",
+                keywords: ["双形态", "专属语音", "卡牌语音", "千幻共享参数"],
+                answer: "双形态皮肤语音设置方法：\n\n1. 获取千幻共享参数和专属卡牌影音设置压缩包\n\n2. 将这个压缩包解压到千幻聆音目录下即可\n\n3. 完成解压后，双形态皮肤就能正常播放专属语音和卡牌语音了\n\n注意：确保静皮包已正确安装，这是语音播放的基础。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "如何实现特定武将的静转动皮肤效果？",
+                keywords: ["静转动", "曹髦", "司马昭", "qhly_changeDynamicSkin", "技能代码"],
+                answer: "特定武将静转动皮肤设置方法：\n\n曹髦静转动设置：\n去十周年UI目录找 markskill.js，在适当位置加上这行代码：\ngame.qhly_changeDynamicSkin(player.name, '经典形象2');\n\n司马昭静转动设置：\n在本体目录 character 里的 jsrg.js 里，在适当位置加：\ngame.qhly_changeDynamicSkin(player.name, '江山如故');\n\n通用静转动设置方法：\n其他角色想要静转动，在想要的武将技能的代码 step 0 下面加：\ngame.qhly_changeDynamicSkin(player.name, '皮肤名字');\n\n例如：想要曹髦用 juejin 后静转动，就这样加。\n\n注意：修改代码前请备份原文件，避免出错。",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "遇到报错应该如何反馈？",
+                keywords: ["报错", "反馈", "报错截图", "错误处理", "稳定触发"],
+                answer: "正确反馈报错的方法：\n\n1. 找作者或群里的管理反馈（别找唐人群主，他只会处理动皮相关的）\n\n2. 反馈时带上报错截图\n\n3. 如果是稳定触发，最好带上视频\n\n4. 详细描述发生错误的原因和操作步骤\n\n5. 如果是扩展类报错，注意琉璃版不兼容其他扩展很正常，作者改过本体的，非琉璃自带扩展类报错勿扰\n\n6. 提供琉璃版版本信息和手机系统信息",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "下载和解压资源有哪些注意事项？",
+                keywords: ["下载注意事项", "解压", "挂后台", "资源下载"],
+                answer: "下载和解压资源的重要注意事项：\n\n1. 下载资源时不要挂后台！不要挂后台！不要挂后台！\n\n2. 解压时一次性完成，不要切换到其他应用\n\n3. 使用MT管理器进行文件操作时，一定要选择复制替换或者解压替换\n\n4. 不要用移动文件到某处，要用解压到某处\n\n5. 确保解压路径正确，参考相关的教程\n\n6. 如果下载失败或解压失败，重新开始整个过程，不要尝试修复",
+                videoUrl: "",
+                links: []
+            },
+            {
+                question: "琉璃版为什么与其他扩展不兼容？",
+                keywords: ["兼容性", "其他扩展", "本体修改", "非琉璃扩展"],
+                answer: "琉璃版与其他扩展不兼容的原因：\n\n1. 作者改过本体代码，与其他扩展可能存在冲突\n\n2. 琉璃版有自定义的API和函数调用方式\n\n3. 非琉璃自带的扩展可能会调用被修改或删除的原版函数\n\n4. 琉璃版优化了性能和稳定性，修改了底层逻辑\n\n注意事项：\n- 琉璃版不兼容其他扩展很正常\n- 非琉璃自带扩展类报错请勿打扰作者\n- 使用扩展前请确认其兼容性\n- 建议使用琉璃版自带的扩展和经过测试的扩展包",
+                videoUrl: "",
+                links: []
+            }
+        ];
+
+        // DOM元素
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const quickQuestionsGrid = document.getElementById('quickQuestionsGrid');
+        const qaCount = document.getElementById('qaCount');
+
+        // 原神恶搞回答
+        const genshinResponse = {
+            title: "不知道我玩原神的",
+            content: "你这个情况我还真没见过。这样吧，你先在浏览器或者应用商店搜索'原神'点击下载安装好后立即运行打开原神app，在主页面点击封面进入账号登录页面，在账号登录页面右下角点击'账号密码'，在账号密码输入框下方点击'立即注册'，最后点击'进入游戏'"
+        };
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 显示问答数量
+            qaCount.textContent = qaData.length;
+            
+            // 生成常见问题按钮
+            generateQuickQuestions();
+            
+            // 显示初始提示
+            showInitialMessage();
+            
+            // 添加搜索事件监听
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // 移动端触摸优化：防止双击缩放
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+        });
+
+        Object.defineProperty(Array.prototype, "randomGets", {
+            configurable:true,
+            enumerable:false,
+            writable:true,
+            value:function(num){
+                if(num>this.length){
+                    num=this.length;
+                }
+                var arr=this.slice(0);
+                var list=[];
+                for(var i=0;i<num;i++){
+                    list.push(arr.splice(Math.floor(Math.random()*arr.length),1)[0]);
+                }
+                return list;
+            }
+        });
+
+        // 生成常见问题按钮
+        function generateQuickQuestions() {
+            // 选择前8个问题作为常见问题
+            const quickQuestions = qaData.randomGets(8);
+            //const quickQuestions = qaData.slice(0, 8);
+            
+            quickQuestionsGrid.innerHTML = '';
+            
+            quickQuestions.forEach(item => {
+                const button = document.createElement('button');
+                button.className = 'question-btn';
+                
+                // 如果有视频，添加视频图标
+                const hasVideo = item.videoUrl && item.videoUrl.trim() !== '';
+                const videoIcon = hasVideo ? ' <i class="fas fa-video" style="font-size:0.75rem; color:#6a11cb;"></i>' : '';
+                
+                // 移动端显示更短的问题标题
+                let displayText = item.question;
+                if (window.innerWidth <= 768) {
+                    displayText = item.question.length > 24 ? 
+                        item.question.substring(0, 24) + '...' : item.question;
+                } else {
+                    displayText = item.question.length > 30 ? 
+                        item.question.substring(0, 30) + '...' : item.question;
+                }
+                
+                button.innerHTML = displayText + videoIcon;
+                
+                button.addEventListener('click', function() {
+                    searchInput.value = item.question;
+                    displayResult(item);
+                    // 移动端点击后自动滚动到结果
+                    if (window.innerWidth <= 768) {
+                        setTimeout(() => {
+                            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
+                });
+                
+                quickQuestionsGrid.appendChild(button);
+            });
+        }
+
+        // 显示初始提示
+        function showInitialMessage() {
+            resultContainer.innerHTML = `
+                <div class="loading">
+                    <h3><i class="fas fa-info-circle"></i> 如何使用本咨询助手</h3>
+                    <p style="margin-bottom: 10px;">1. 在搜索框中输入问题关键词，例如："皮肤包导入"、"更新方法"等</p>
+                    <p style="margin-bottom: 10px;">2. 点击下方常见问题按钮快速获取答案</p>
+                    <p style="margin-bottom: 10px;">3. 搜索结果会显示匹配的问题和答案</p>
+                    <p>4. 答案中的换行和格式会保留原样显示</p>
+                    <div style="margin-top: 20px; padding: 15px; background-color: #f0f7ff; border-radius: 8px;">
+                        <strong>当前知识库包含以下主题：</strong>
+                        <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+                            <span class="keyword-tag">皮肤包相关</span>
+                            <span class="keyword-tag">更新安装</span>
+                            <span class="keyword-tag">禁将设置</span>
+                            <span class="keyword-tag">扩展使用</span>
+                            <span class="keyword-tag">大厅主题</span>
+                            <span class="keyword-tag">作弊控制</span>
+                            <span class="keyword-tag">手牌设置</span>
+                            <span class="keyword-tag">疑难解答</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 执行搜索
+        function performSearch() {
+            const query = searchInput.value.trim();
+            
+            if (!query) {
+                showInitialMessage();
+                return;
+            }
+            
+            // 显示加载状态
+            resultContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> 正在搜索中...</div>';
+            
+            // 模拟网络延迟
+            setTimeout(() => {
+                const results = searchQA(query);
+                
+                if (results.length === 0) {
+                    // 显示原神恶搞回答
+                    showGenshinResponse(query);
+                } else {
+                    displayResult(results[0]); // 显示第一个匹配结果
+                }
+            }, 300);
+        }
+
+        // 显示原神恶搞回答
+        function showGenshinResponse(query) {
+            const contentLines = genshinResponse.content.split('。');
+            
+            const genshinHtml = `
+                <div class="genshin-response">
+                    <h3 class="genshin-title"><i class="fas fa-gamepad"></i> ${genshinResponse.title}</h3>
+                    <div class="genshin-content">
+                        <div style="margin: 15px 0; padding: 12px; background-color: #fff5f5; border-radius: 8px; border-left: 4px solid #ff6b6b; font-size: 0.95rem;">
+                            对于您搜索的 "<strong>${query}</strong>"，我这边暂时没有找到相关的答案，这个情况我还真没见过。
+                        </div>
+
+                        <p style="margin-bottom: 12px;">这样吧，请按照以下步骤操作：</p>
+                        
+                        <div class="genshin-step">
+                            1. 先在浏览器或者应用商店搜索"原神"
+                        </div>
+                        <div class="genshin-step">
+                            2. 点击下载安装好后立即运行打开原神app
+                        </div>
+                        <div class="genshin-step">
+                            3. 在主页面点击封面进入账号登录页面
+                        </div>
+                        <div class="genshin-step">
+                            4. 在账号登录页面右下角点击"账号密码"
+                        </div>
+                        <div class="genshin-step">
+                            5. 在账号密码输入框下方点击"立即注册"
+                        </div>
+                        <div class="genshin-step">
+                            6. 最后点击"进入游戏"
+                        </div>
+                        
+                        <div class="genshin-tip">
+                            <i class="fas fa-lightbulb"></i> <strong>温馨提示：</strong> 如果您的问题确实与琉璃版相关，请尝试使用更准确的关键词，或者点击下方常见问题按钮。
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                        <button class="question-btn" onclick="showInitialMessage()" style="flex: 1; min-width: 140px;">
+                            <i class="fas fa-home"></i> 返回首页
+                        </button>
+                        <button class="question-btn" onclick="searchInput.value='皮肤包'; performSearch()" style="flex: 1; min-width: 140px;">
+                            <i class="fas fa-search"></i> 搜索"皮肤包"
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            resultContainer.innerHTML = genshinHtml;
+            
+            // 滚动到结果区域
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 搜索Q&A - 修改后的搜索逻辑
+        function searchQA(query) {
+            const lowerQuery = query.toLowerCase();
+            const titleMatches = [];   // 标题匹配
+            const keywordMatches = []; // 关键词匹配
+            const answerMatches = [];  // 答案匹配
+            const usedItems = new Set(); // 用于记录已匹配的条目，避免重复
+            
+            // 第一轮：全局匹配所有标题（问题）
+            qaData.forEach((item, index) => {
+                if (item.question.toLowerCase().includes(lowerQuery)) {
+                    titleMatches.push(item);
+                    usedItems.add(index);
+                }
+            });
+            
+            // 第二轮：全局匹配所有关键词（排除已匹配的标题）
+            qaData.forEach((item, index) => {
+                if (usedItems.has(index)) return; // 已匹配过，跳过
+                
+                for (const keyword of item.keywords) {
+                    if (keyword.toLowerCase().includes(lowerQuery)) {
+                        keywordMatches.push(item);
+                        usedItems.add(index);
+                        break; // 找到一个匹配的关键词就跳出循环
+                    }
+                }
+            });
+            
+            // 第三轮：全局匹配所有答案（排除已匹配的标题和关键词）
+            qaData.forEach((item, index) => {
+                if (usedItems.has(index)) return; // 已匹配过，跳过
+                
+                if (item.answer.toLowerCase().includes(lowerQuery)) {
+                    answerMatches.push(item);
+                    usedItems.add(index);
+                }
+            });
+            
+            // 合并结果：标题匹配 > 关键词匹配 > 答案匹配
+            return [...titleMatches, ...keywordMatches, ...answerMatches];
+        }
+
+        // 将文本中的URL转换为可点击的链接
+        function convertUrlsToLinks(text) {
+            // URL正则表达式，匹配http/https/ftp/ftps开头的URL
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            
+            // 将文本中的URL替换为链接
+            return text.replace(urlRegex, function(url) {
+                // 对URL进行编码处理
+                const encodedUrl = encodeURI(url);
+                // 移动端显示缩短的URL
+                let displayUrl = url;
+                if (window.innerWidth <= 768 && url.length > 40) {
+                    displayUrl = url.substring(0, 30) + '...';
+                }
+                return `<a href="${encodedUrl}" target="_blank" rel="noopener noreferrer" style="word-break: break-all;">${displayUrl}</a>`;
+            });
+        }
+
+        // 显示结果
+        function displayResult(item) {
+            // 将回答中的URL转换为可点击链接，并保留换行
+            const answerWithLinks = convertUrlsToLinks(item.answer);
+            const formattedAnswer = answerWithLinks.replace(/\n/g, '<br>');
+            
+            // 生成关键词标签
+            const keywordTags = item.keywords.map(keyword => 
+                `<span class="keyword-tag">${keyword}</span>`
+            ).join('');
+            
+            resultContainer.innerHTML = `
+                <h3><i class="fas fa-question-circle"></i> ${item.question}</h3>
+                <div class="keyword-section">
+                    <div class="keyword-title">相关关键词：</div>
+                    ${keywordTags}
+                </div>
+                <div style="margin-top: 18px;">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 10px; color: #2c3e50;"><i class="fas fa-comment-dots"></i> 解答：</h4>
+                    <p>${formattedAnswer}</p>
+                </div>
+                <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                    <button class="question-btn" onclick="showInitialMessage()" style="flex: 1; min-width: 140px;">
+                        <i class="fas fa-home"></i> 返回首页
+                    </button>
+                    <button class="question-btn" onclick="searchInput.value=''; performSearch()" style="flex: 1; min-width: 140px;">
+                        <i class="fas fa-search"></i> 新的搜索
+                    </button>
+                </div>
+            `;
+            
+            // 滚动到结果区域
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // 窗口大小改变时重新布局
+        window.addEventListener('resize', function() {
+            // 重新生成问题按钮以适配新的屏幕宽度
+            generateQuickQuestions();
+        });
+    </script>
+</body>
+</html>
